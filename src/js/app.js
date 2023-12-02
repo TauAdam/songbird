@@ -1,11 +1,11 @@
-import ruData from '../data/birds';
-import questionPass from '../assets/img/bird-holding-question-mark.jpeg';
-import fallSound from '../assets/sounds/fail.mp3';
-import winSound from '../assets/sounds/win.mp3';
-import soundAccompaniment from './helpers/audio';
+import questionPass from '../assets/img/bird-holding-question-mark.jpeg'
+import fallSound from '../assets/sounds/fail.mp3'
+import winSound from '../assets/sounds/win.mp3'
+import ruData from '../data/birds'
+import { getRandomQuestion, soundAccompaniment } from './helpers'
 
-let j = 0;
-let round = ruData[j];
+let roundIndex = 0;
+let round = ruData[roundIndex];
 let score = 0;
 let attemptNumber = 0;
 const MAX_SCORE = 30;
@@ -28,18 +28,14 @@ const restartBtn = document.querySelector('.btn_restart');
 const gameScore = document.querySelector('.score');
 const gameResult = document.querySelector('.game-over__result');
 
-const getRandomInt = max => Math.floor(Math.random() * max);
 
-let currentQuestion;
-const getRandomQuestion = () => {
-  currentQuestion = round[getRandomInt(6)];
-};
+const currentQuestion = getRandomQuestion(round)
+
 
 const pageItem = document.querySelectorAll('.page__item');
 const setUl = () => {
-  pageItem[j].classList.add('active');
+  pageItem[roundIndex].classList.add('active');
   const ul = document.querySelectorAll('.option');
-  // const li = document.createElement('li')
   ul.forEach(li => {
     li.innerHTML = '';
   });
@@ -125,10 +121,10 @@ const watch = () => {
 };
 
 nextBtn.addEventListener('click', e => {
-  if (j < 5) {
-    pageItem[j].classList.remove('active');
-    j++;
-    round = ruData[j];
+  if (roundIndex < 5) {
+    pageItem[roundIndex].classList.remove('active');
+    roundIndex++;
+    round = ruData[roundIndex];
 
     success = false;
     document
@@ -142,7 +138,7 @@ nextBtn.addEventListener('click', e => {
     nextBtn.disabled = true;
     nextBtn.classList.remove('active');
   } else {
-    pageItem[j].classList.remove('active');
+    pageItem[roundIndex].classList.remove('active');
     // roundItem[0].classList.add('active');
     quizPage.style.display = 'none';
     resultPage.style.display = 'block';
@@ -155,7 +151,7 @@ nextBtn.addEventListener('click', e => {
 });
 
 restartBtn.addEventListener('click', e => {
-  j = 0;
+  roundIndex = 0;
   success = false;
   score = 0;
   gameScore.textContent = `Счет: ${score}`;
@@ -165,9 +161,8 @@ restartBtn.addEventListener('click', e => {
 });
 
 const main = () => {
-  round = ruData[j];
-  getRandomQuestion();
-  // console.log(currentQuestion);
+  round = ruData[roundIndex];
+  getRandomQuestion(round);
   hideQuestion();
   hideCard();
   setUl();
